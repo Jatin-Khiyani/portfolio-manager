@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sunny CV generator</title>
+</head>
+
+<body>
+    <h1>User profile</h1>
+    <p>{{ welcome_message }}</p>
+    <ul>
+        {% for person in people %}
+        <li>
+            <div> Name : {{person.name}}</div>
+            <div>Profession : {{person.profession}}</div>
+            <div>Experience : {{person.experience}}</div>
+            <div>Education : {{person.education}}</div>
+        </li>
+        {% endfor %}
+    <ul>
+
+</body>
+
+</html>
