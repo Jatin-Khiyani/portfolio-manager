@@ -64,18 +64,13 @@ def home(request: Request, session: SessionDep):
     )
 
 # PROFILE → by name
-@app.get("/profile/{name}", response_class=HTMLResponse)
+@app.get("/{name}", response_class=HTMLResponse)
 def profile(name: str, request: Request, session: SessionDep):
     person = session.exec(select(Person).where(Person.name == name)).first()
     return templates.TemplateResponse(
-        "index_updated.html",
+        "profile_partial.html",
         {"request": request, "person": person}
     )
 
-# @app.get("/people/{person_id}/profile", response_class=HTMLResponse)
-# def get_person_profile(person_id: int):
-#     if person_id in people_db:
-#         person = people_db[person_id]
-#         return templates.TemplateResponse("profile.html", {"request": {}, "person": person})
-#     return {"error": "Person not found"}
+
 
