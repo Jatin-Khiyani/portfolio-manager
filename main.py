@@ -17,9 +17,10 @@ welcome_msg = "Profile for user"
 class Person(SQLModel,table = True):
     person_id: int | None = Field(default=None, primary_key=True)
     name: str
-    profession : str
+    email:str
     experience: str
     education: str
+    projects: str
 
 # Setting Up SQLModel Database
 
@@ -53,30 +54,22 @@ def add_person(person: Person,session : SessionDep):
         "data": person
     }
 
-@app.get("/people")
-def get_all_people(session : SessionDep):
-    people = session.exec(select(Person)).all()
-    return people
-
-@app.get("/people/{person_id}")
-def get_person(person_id: int,session: SessionDep):
-    person = session.get(Person,person_id)
-    if not person:
-        return {"error": "Person not found"}
-    return person
-
+# HOME → list names
 @app.get("/", response_class=HTMLResponse)
-def get_HTML(request: Request, session: SessionDep):
-
+def home(request: Request, session: SessionDep):
     people = session.exec(select(Person)).all()
-
     return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "people": people,
-            "welcome_message": welcome_msg
-        }
+        "home.html",
+        {"request": request, "people": people}
+    )
+
+# PROFILE → by name
+@app.get("/profile/{name}", response_class=HTMLResponse)
+def profile(name: str, request: Request, session: SessionDep):
+    person = session.exec(select(Person).where(Person.name == name)).first()
+    return templates.TemplateResponse(
+        "index_updated.html",
+        {"request": request, "person": person}
     )
 
 # @app.get("/people/{person_id}/profile", response_class=HTMLResponse)

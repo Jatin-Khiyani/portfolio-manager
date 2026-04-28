@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profiles</title>
+</head>
+<body>
+
+    <h1>All People</h1>
+
+    <ul>
+        {% for person in people %}
+            <li>
+                <a href="/profile/{{ person.name }}">
+                    {{ person.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
