@@ -59,8 +59,9 @@ def add_person(person: Person,session : SessionDep):
 def home(request: Request, session: SessionDep):
     people = session.exec(select(Person)).all()
     return templates.TemplateResponse(
-        "home.html",
-        {"request": request, "people": people}
+        request=request,
+        name = "home.html",
+        context={"people":people}
     )
 
 # PROFILE → by name
@@ -68,8 +69,10 @@ def home(request: Request, session: SessionDep):
 def profile(name: str, request: Request, session: SessionDep):
     person = session.exec(select(Person).where(Person.name == name)).first()
     return templates.TemplateResponse(
-        "profile_partial.html",
-        {"request": request, "person": person}
+        request=request,
+        name = "index_updated.html",
+        context={"person":person}
+        
     )
 
 
