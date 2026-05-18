@@ -8,9 +8,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine
 from sqlmodel import Field, SQLModel, Session, select
 
+from starlette.middleware.sessions import SessionMiddleware
 
 
 app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key="yes")
 
 templates = Jinja2Templates(directory="HTML")
 
@@ -21,15 +23,16 @@ class Sign_Up(SQLModel, table=True):
     user_name: str
     password: str
 
+
 # Database for storing user data for portfolio
-class Person(SQLModel,table = True):
+class Person(SQLModel, table=True):
     person_id: int | None = Field(default=None, primary_key=True)
+    user_name: str = Field(foreign_key="sign_up.user_name")
     name: str
-    email:str
+    email: str
     experience: str
     education: str
     projects: str
-
 
 
 # setting up sql database
@@ -68,42 +71,97 @@ def home_page(request: Request):
 def sign_up_page(request: Request):
     return templates.TemplateResponse(request=request, name="sign-up.html")
 
+
 # Sign In page
-@app.get("/sign-in",response_class=HTMLResponse)
-def sign_in_page(request:Request):
-    return templates.TemplateResponse(request=request,name="sign-in.html")
+@app.get("/sign-in", response_class=HTMLResponse)
+def sign_in_page(request: Request):
+    return templates.TemplateResponse(request=request, name="sign-in.html")
+
 
 # Saving sign_up deatils to the database
 @app.post("/sign-up")
-def store_login_information(user_name: Annotated[str,Form()], password: Annotated[str,Form()], session: SessionDep):
+def store_login_information(
+    user_name: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    session: SessionDep,
+    request: Request,
+):
     sign_up = Sign_Up(user_name=user_name, password=password)
     session.add(sign_up)
     session.commit()
+    request.session["user_name"] = user_name
     session.refresh(sign_up)
 
-    return RedirectResponse(url=f"/create_portfolio/{user_name}", status_code=303)
+    return RedirectResponse(url="/create-portfolio", status_code=303)
+
 
 # Sign in page and login (checking username and password)
 @app.post("/sign-in")
-def check_login_information(user_name: Annotated[str,Form()], password: Annotated[str,Form()], session: SessionDep,request:Request):
+def check_login_information(
+    user_name: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    session: SessionDep,
+    request: Request,
+):
 
-    statement = select(Sign_Up).where(Sign_Up.user_name==user_name,Sign_Up.password==password)
+    statement = select(Sign_Up).where(
+        Sign_Up.user_name == user_name, Sign_Up.password == password
+    )
     sign_up = session.exec(statement).first()
 
     if sign_up:
-        return RedirectResponse(url=f"/create_portfolio/{user_name}", status_code=303)
-    else: 
-         return templates.TemplateResponse(
-            name = "sign-in.html",
-            request = request, 
-            context =  {"error" : "Could not find username and password, please try again"}
+        request.session["user_name"] = user_name
+        return RedirectResponse(url="/create-portfolio", status_code=303)
+    else:
+        return templates.TemplateResponse(
+            name="sign-in.html",
+            request=request,
+            context={"error": "Could not find username and password, please try again"},
         )
-    
-@app.get(f"/create_portfolio/{Sign_Up.user_name}")
-def create_portfolio_page(request:Request):
-    return templates.TemplateResponse(request = request,name="create_portfolio.html")
 
-@app.post(f"/create_portfolio/{Sign_Up.user_name}")
-def store_person_data(name: Annotated[str, Form()],email: Annotated[str, Form()],experience: Annotated[str, Form()],education: Annotated[str, Form()],projects: Annotated[str, Form()],session: SessionDep,request:Request):
-    #### Make this Function in the next sprint. 
 
+@app.get("/create-portfolio", response_class=HTMLResponse)
+def create_portfolio_page(request: Request):
+    user_name = request.session.get("user_name")
+    if not user_name:
+        return RedirectResponse(url="/sign-in")
+    return templates.TemplateResponse(request=request, name="create-portfolio.html")
+
+
+@app.post("/create-portfolio")
+def store_person_data(
+    name: Annotated[str, Form()],
+    email: Annotated[str, Form()],
+    experience: Annotated[str, Form()],
+    education: Annotated[str, Form()],
+    projects: Annotated[str, Form()],
+    session: SessionDep,
+    request: Request,
+):
+    user_name = request.session.get("user_name")  # ← READ FROM SESSION
+    if not user_name:
+        return RedirectResponse(url="/sign-in")
+
+    person = Person(
+        user_name=user_name,
+        name=name,
+        email=email,
+        experience=experience,
+        education=education,
+        projects=projects,
+    )
+    session.add(person)
+    session.commit()
+    session.refresh(person)
+    return RedirectResponse(url="/portfolio", status_code=303)
+
+
+@app.get("/portfolio", response_class=HTMLResponse)
+def profile(request: Request, session: SessionDep):
+    user_name = request.session.get("user_name")
+    if not user_name:
+        return RedirectResponse(url="/sign-in")
+    person = session.exec(select(Person).where(Person.user_name == user_name)).first()
+    return templates.TemplateResponse(
+        request=request, name="portfolio.html", context={"person": person}
+    )
