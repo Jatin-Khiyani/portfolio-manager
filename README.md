@@ -1,50 +1,50 @@
-# Portfolio Manager (FastAPI)
+# Portfolio Manager
 
-A minimal portfolio manager built with FastAPI.  
-This project is in an early stage and currently supports basic profile creation and viewing.
+A web app where users sign up, enter their professional details, and get a clean printable resume. Built with FastAPI, SQLModel, and Jinja2 templates.
+
+---
+
+## Stack
+
+FastAPI · SQLModel · SQLite · Jinja2 · HTML/CSS · Uvicorn
+
+---
 
 ## Setup
+
+Requires Python 3.10.4 — the app breaks on higher versions.
+
+```bash
+python --version
+# Python 3.10.4
+```
 
 ```bash
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-## Usage
+App runs at http://127.0.0.1:8000
 
-### Add a Person
+---
 
-Go to:
-http://127.0.0.1:8000/docs
+## How it works
 
-Use the POST endpoint with:
+Sign up or sign in, fill in your name, email, experience, education, and projects, and the app generates a formatted resume page at `/portfolio`.
 
-```json
-{
-  "person_id": 0,
-  "name": "string",
-  "email": "string",
-  "experience": "string",
-  "education": "string",
-  "projects": "string"
-}
-```
+---
 
-### View Data
+## Known Issues
 
-- Home: http://127.0.0.1:8000/  
-  Lists all people
+- After logging in, the existing portfolio is not fetched from the database — users have to re-enter their details, and each submission creates a duplicate entry
+- Passwords are stored in plain text with no hashing
 
-- Profile: http://127.0.0.1:8000/{Name}  
-  View full profile
+---
 
-## Current Features
+## Planned Features
 
-- Add profiles via API
-- List all users
-- View individual profiles
-
-## Status
-
-Early development — no persistence, validation, or authentication yet.
-
+- Fetch existing portfolio on login and prevent duplicate entries
+- Password hashing with bcrypt/passlib
+- Edit portfolio details directly from the portfolio page
+- Export resume as a PDF
+- More resume fields — multiple experience entries, skills, project cards, social links
