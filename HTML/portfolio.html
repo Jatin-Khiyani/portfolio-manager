@@ -8,66 +8,155 @@
 
     <style>
         body {
+            margin: 0;
+            background-color: white;
             font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 1.6;
+            color: #111;
+            line-height: 1.45;
+        }
+
+        .resume {
+            width: 800px;
+            min-height: 1050px;
+            margin: 30px auto;
+            padding: 45px 55px;
+            background-color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
         }
 
         h1 {
-            margin-bottom: 5px;
+            margin: 0;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
-        .email {
-            color: gray;
-            margin-bottom: 30px;
+        .contact {
+            margin-top: 6px;
+            font-size: 14px;
         }
 
         .section {
-            margin-top: 30px;
+            margin-top: 24px;
         }
 
-        .section h2 {
-            border-bottom: 2px solid #000;
-            padding-bottom: 5px;
+        .section-title {
+            font-size: 17px;
+            font-weight: bold;
+            border-bottom: 1.5px solid #111;
+            padding-bottom: 3px;
+            margin-bottom: 10px;
         }
 
-        .card {
+        .entry {
             margin-top: 10px;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .entry-subtitle {
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        p {
+            margin: 7px 0 0;
+            font-size: 14px;
+            text-align: justify;
+            white-space: pre-line;
+        }
+
+        .empty-text {
+            color: #555;
+            font-style: italic;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+
+            .resume {
+                margin: 0;
+                width: auto;
+                min-height: auto;
+                padding: 35px 45px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Name -->
-    <h1>{{ person.name }}</h1>
+    <main class="resume">
 
-    <!-- Email -->
-    <div class="email">{{ person.email }}</div>
+        <header class="header">
+            <h1>{{ person.name }}</h1>
+            <div class="contact">
+                {{ person.email }}
+            </div>
+        </header>
 
-    <!-- Education -->
-    <div class="section">
-        <h2>Education</h2>
-        <div class="card">
-            <p>{{ person.education }}</p>
-        </div>
-    </div>
+        <section class="section">
+            <div class="section-title">Education</div>
 
-    <!-- Experience -->
-    <div class="section">
-        <h2>Experience</h2>
-        <div class="card">
-            <p>{{ person.experience }}</p>
-        </div>
-    </div>
+            <div class="entry">
+                <div class="entry-header">
+                    <span>Academic Background</span>
+                </div>
 
-    <!-- Projects -->
-    <div class="section">
-        <h2>Projects</h2>
-        <div class="card">
-            <p>{{ person.projects }}</p>
-        </div>
-    </div>
+                {% if person.education %}
+                    <p>{{ person.education }}</p>
+                {% else %}
+                    <p class="empty-text">Education details not provided.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Experience</div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <span>Professional Experience</span>
+                </div>
+
+                {% if person.experience %}
+                    <p>{{ person.experience }}</p>
+                {% else %}
+                    <p class="empty-text">Experience details not provided.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">Projects</div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <span>Project Work</span>
+                </div>
+
+                {% if person.projects %}
+                    <p>{{ person.projects }}</p>
+                {% else %}
+                    <p class="empty-text">Project details not provided.</p>
+                {% endif %}
+            </div>
+        </section>
+
+    </main>
 
 </body>
 

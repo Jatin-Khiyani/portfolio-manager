@@ -2,23 +2,146 @@
 <html>
 <head>
     <title>Sign Up</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #ffecb4;
+            color: #5a3d2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            width: 90%;
+            max-width: 760px;
+            text-align: center;
+            padding: 45px 30px;
+        }
+
+        .card {
+            background-color: #ffecb4;
+            border: 3px solid #5a3d2b;
+            border-radius: 24px;
+            padding: 45px 35px;
+            box-shadow: 10px 10px 0 #e5771e;
+        }
+
+        h1 {
+            font-size: 46px;
+            margin: 0;
+            color: #5a3d2b;
+        }
+
+        .cheeky-line {
+            font-size: 16px;
+            margin-top: 12px;
+            color: #e5771e;
+            font-style: italic;
+        }
+
+        form {
+            margin-top: 35px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            border: 2px solid #5a3d2b;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #fff7d8;
+            color: #5a3d2b;
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: #75c8ae;
+            color: #5a3d2b;
+            padding: 14px 38px;
+            border-radius: 14px;
+            border: 3px solid #5a3d2b;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 6px 6px 0 #e5771e;
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0 #e5771e;
+        }
+
+        .small-link {
+            display: block;
+            margin-top: 24px;
+            color: #5a3d2b;
+            font-size: 15px;
+        }
+
+        .small-link a {
+            color: #e5771e;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .card {
+                padding: 35px 24px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Sign Up</h1>
+    <main class="page">
+        <section class="card">
+            <h1>Create Your New Account</h1>
 
-    <form action="/sign-up" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="user_name" required>
+            <p class="cheeky-line">
+                You are very close to making a generic resume.
+            </p>
 
-        <br><br>
+            <form action="/sign-up" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="user_name" required>
+                </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-        <br><br>
+                <button type="submit">Sign Up</button>
+            </form>
 
-        <button type="submit">Submit</button>
-    </form>
+            <p class="small-link">
+                Already have an account?
+                <a href="/sign-in">Sign in</a>
+            </p>
+        </section>
+    </main>
 </body>
 </html>

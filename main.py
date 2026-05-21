@@ -36,7 +36,7 @@ class Person(SQLModel, table=True):
 
 
 # setting up sql database
-sqlite_file_name = "portfolio_manager_db.db"
+sqlite_file_name = "portfolio_manager.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
 
