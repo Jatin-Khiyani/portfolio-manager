@@ -89,6 +89,12 @@
             box-shadow: 2px 2px 0 #e5771e;
         }
 
+         .error {
+            margin-top: 22px;
+            color: #e5771e;
+            font-weight: bold;
+        }
+
         .small-link {
             display: block;
             margin-top: 24px;
@@ -136,6 +142,10 @@
 
                 <button type="submit">Sign Up</button>
             </form>
+
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
 
             <p class="small-link">
                 Already have an account?

@@ -86,13 +86,23 @@ def store_login_information(
     session: SessionDep,
     request: Request,
 ):
-    sign_up = Sign_Up(user_name=user_name, password=password)
-    session.add(sign_up)
-    session.commit()
-    request.session["user_name"] = user_name
-    session.refresh(sign_up)
+    statement = select(Sign_Up).where(Sign_Up.user_name == user_name)
+    user = session.exec(statement).first()
 
-    return RedirectResponse(url="/create-portfolio", status_code=303)
+    if user:
+        return templates.TemplateResponse(
+            name="sign-up.html",
+            request=request,
+            context={"error": "User name already exists"},
+        )
+    else:
+        sign_up = Sign_Up(user_name=user_name, password=password)
+        session.add(sign_up)
+        session.commit()
+        request.session["user_name"] = user_name
+        session.refresh(sign_up)
+
+        return RedirectResponse(url="/create-portfolio", status_code=303)
 
 
 # Sign in page and login (checking username and password)
@@ -111,7 +121,11 @@ def check_login_information(
 
     if sign_up:
         request.session["user_name"] = user_name
-        return RedirectResponse(url="/create-portfolio", status_code=303)
+        return templates.TemplateResponse(
+            name="sign-in.html",
+            request=request,
+            context={"success": True, "name": user_name},
+        )
     else:
         return templates.TemplateResponse(
             name="sign-in.html",
@@ -138,19 +152,34 @@ def store_person_data(
     session: SessionDep,
     request: Request,
 ):
+    
     user_name = request.session.get("user_name")  # ← READ FROM SESSION
+
     if not user_name:
         return RedirectResponse(url="/sign-in")
 
-    person = Person(
-        user_name=user_name,
-        name=name,
-        email=email,
-        experience=experience,
-        education=education,
-        projects=projects,
-    )
-    session.add(person)
+    statement = select(Person).where(Person.user_name == user_name) 
+
+    person = session.exec(statement).first()
+
+    if person:
+        person.name=name
+        person.email=email
+        person.experience=experience
+        person.education=education
+        person.projects=projects
+    else:
+        person = Person(
+            user_name=user_name,
+            name=name,
+            email=email,
+            experience=experience,
+            education=education,
+            projects=projects,
+        )
+        session.add(person)
+
+    
     session.commit()
     session.refresh(person)
     return RedirectResponse(url="/portfolio", status_code=303)
