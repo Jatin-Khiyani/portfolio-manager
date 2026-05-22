@@ -108,6 +108,70 @@
             text-decoration: none;
         }
 
+        .popup-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(90, 61, 43, 0.45);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .popup {
+            width: 90%;
+            max-width: 620px;
+            background-color: #e5771e;
+            color: #5a3d2b;
+            border: 4px solid #5a3d2b;
+            border-radius: 28px;
+            padding: 42px 36px;
+            text-align: center;
+            box-shadow: 12px 12px 0 #5a3d2b;
+        }
+
+        .popup h2 {
+            font-size: 34px;
+            margin: 0;
+            color: #5a3d2b;
+        }
+
+        .popup p {
+            margin-top: 14px;
+            font-size: 17px;
+            color: #ffecb4;
+            font-style: italic;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 34px;
+            flex-wrap: wrap;
+        }
+
+        .popup-button {
+            text-decoration: none;
+            background-color: #75c8ae;
+            color: #5a3d2b;
+            padding: 15px 30px;
+            border-radius: 14px;
+            border: 3px solid #5a3d2b;
+            font-size: 17px;
+            font-weight: bold;
+            box-shadow: 6px 6px 0 #ffecb4;
+            transition: 0.2s ease;
+        }
+
+        .popup-button:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0 #ffecb4;
+        }
+
         @media (max-width: 700px) {
             h1 {
                 font-size: 36px;
@@ -115,6 +179,14 @@
 
             .card {
                 padding: 35px 24px;
+            }
+
+            .popup h2 {
+                font-size: 28px;
+            }
+
+            .popup-button {
+                width: 210px;
             }
         }
     </style>
@@ -153,5 +225,27 @@
             </p>
         </section>
     </main>
+
+    {% if success %}
+        <div class="popup-background">
+            <section class="popup">
+                <h2>Do you want to edit your portfolio?</h2>
+
+                <p>
+                    Welcome back, {{ name }}. Your resume machine is still alive.
+                </p>
+
+                <div class="popup-buttons">
+                    <a class="popup-button" href="/create-portfolio">
+                        Edit My Portfolio
+                    </a>
+
+                    <a class="popup-button" href="/portfolio">
+                        View My Portfolio
+                    </a>
+                </div>
+            </section>
+        </div>
+    {% endif %}
 </body>
 </html>
