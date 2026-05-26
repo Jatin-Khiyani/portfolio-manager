@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Create Portfolio</title>
-
     <style>
         body {
             margin: 0;
@@ -11,116 +10,163 @@
             background-color: #ffecb4;
             color: #5a3d2b;
         }
-
         .page {
             width: 90%;
             max-width: 1050px;
             margin: 0 auto;
             padding: 55px 25px;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 38px;
-        }
-
-        h1 {
-            font-size: 48px;
-            margin: 0;
-            color: #5a3d2b;
-        }
-
-        .cheeky-line {
-            margin-top: 12px;
-            font-size: 17px;
-            color: #e5771e;
-            font-style: italic;
-        }
-
+        .header { text-align: center; margin-bottom: 38px; }
+        h1 { font-size: 48px; margin: 0; color: #5a3d2b; }
+        .cheeky-line { margin-top: 12px; font-size: 17px; color: #e5771e; font-style: italic; }
+ 
         .form-box {
             background-color: #5a3d2b;
             border-radius: 28px;
             padding: 28px;
             box-shadow: 12px 12px 0 #e5771e;
         }
-
-        form {
+        .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
-
         .section {
             background-color: #75c8ae;
             border-radius: 20px;
             padding: 26px;
             border: 3px solid #ffecb4;
         }
-
-        .section-wide {
-            grid-column: span 2;
-        }
-
+        .section-wide { grid-column: span 2; }
+ 
         h2 {
-            margin: 0 0 22px;
-            font-size: 22px;
+            margin: 0 0 20px;
+            font-size: 20px;
             color: #5a3d2b;
             border-bottom: 3px solid #5a3d2b;
             display: inline-block;
-            padding-bottom: 6px;
+            padding-bottom: 5px;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        .form-group { margin-bottom: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+ 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 15px;
+            margin-bottom: 6px;
+            font-size: 14px;
             font-weight: bold;
             color: #5a3d2b;
         }
-
-        .optional-tag {
-            font-weight: normal;
-            font-size: 12px;
-            color: rgba(90, 61, 43, 0.65);
-            margin-left: 6px;
-        }
-
-        input,
-        textarea {
+        .opt { font-weight: normal; font-size: 11px; color: rgba(90,61,43,0.6); margin-left: 5px; }
+ 
+        input, textarea, select {
             width: 100%;
             box-sizing: border-box;
             border: none;
             border-bottom: 3px solid #5a3d2b;
             background-color: transparent;
-            padding: 11px 4px;
-            font-size: 16px;
+            padding: 10px 4px;
+            font-size: 15px;
             color: #5a3d2b;
             outline: none;
             font-family: Arial, sans-serif;
         }
-
-        textarea {
-            min-height: 95px;
-            resize: vertical;
-            line-height: 1.5;
+        select { cursor: pointer; }
+        select option { background-color: #75c8ae; color: #5a3d2b; }
+        textarea { min-height: 75px; resize: vertical; line-height: 1.5; }
+        input::placeholder, textarea::placeholder { color: rgba(90,61,43,0.55); }
+        .hint { margin-top: 5px; font-size: 11px; color: rgba(90,61,43,0.65); font-style: italic; }
+ 
+        /* --- Dynamic entry cards --- */
+        .entries-list { display: flex; flex-direction: column; gap: 14px; }
+ 
+        .entry-card {
+            background-color: rgba(255,236,180,0.45);
+            border: 2px solid rgba(90,61,43,0.3);
+            border-radius: 14px;
+            padding: 16px;
+            position: relative;
         }
-
-        input::placeholder,
-        textarea::placeholder {
-            color: rgba(90, 61, 43, 0.65);
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #5a3d2b;
+            padding: 0;
+            box-shadow: none;
+            transform: none !important;
+            line-height: 1;
         }
-
-        .button-area {
-            grid-column: span 2;
-            text-align: center;
-            margin-top: 10px;
+        .remove-btn:hover { color: #e5771e; box-shadow: none !important; }
+ 
+        .add-btn {
+            margin-top: 14px;
+            background-color: rgba(255,236,180,0.5);
+            color: #5a3d2b;
+            border: 2px dashed #5a3d2b;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: none;
+            transition: background 0.2s;
         }
-
-        button {
+        .add-btn:hover { background-color: rgba(255,236,180,0.9); transform: none; box-shadow: none; }
+ 
+        /* Skills tags */
+        .skills-input-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            border-bottom: 3px solid #5a3d2b;
+            padding: 8px 4px;
+            min-height: 48px;
+        }
+        .skill-tag {
+            background-color: #5a3d2b;
+            color: #ffecb4;
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .skill-tag button {
+            background: none;
+            border: none;
+            color: #ffecb4;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            box-shadow: none;
+            transform: none !important;
+            line-height: 1;
+        }
+        .skill-tag button:hover { color: #f4a127; box-shadow: none !important; }
+        #skill-input {
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            color: #5a3d2b;
+            outline: none;
+            min-width: 120px;
+            flex: 1;
+            padding: 4px;
+        }
+ 
+        /* Submit */
+        .button-area { grid-column: span 2; text-align: center; margin-top: 10px; }
+        .submit-btn {
             background-color: #f4a127;
             color: #5a3d2b;
             border: 3px solid #ffecb4;
@@ -132,91 +178,72 @@
             box-shadow: 6px 6px 0 #75c8ae;
             transition: 0.2s ease;
         }
-
-        button:hover {
-            transform: translate(4px, 4px);
-            box-shadow: 2px 2px 0 #75c8ae;
-        }
-
+        .submit-btn:hover { transform: translate(4px,4px); box-shadow: 2px 2px 0 #75c8ae; }
+ 
         @media (max-width: 800px) {
-            h1 {
-                font-size: 36px;
-            }
-
-            form {
-                grid-template-columns: 1fr;
-            }
-
-            .section-wide,
-            .button-area {
-                grid-column: span 1;
-            }
-
-            .form-box {
-                padding: 20px;
-            }
+            h1 { font-size: 32px; }
+            .grid { grid-template-columns: 1fr; }
+            .section-wide, .button-area { grid-column: span 1; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-
 <body>
-    <main class="page">
-        <div class="header">
-            <h1>Fill Your Resume Details</h1>
-            <p class="cheeky-line">May FAANG find you.</p>
-        </div>
+<main class="page">
+    <div class="header">
+        <h1>Fill Your Resume Details</h1>
+        <p class="cheeky-line">May FAANG find you.</p>
+    </div>
  
-        <div class="form-box">
-            <form action="/create-portfolio" method="post">
+    <div class="form-box">
+        <form id="main-form" action="/create-portfolio" method="post">
+            <!-- hidden field that carries all structured JSON -->
+            <input type="hidden" name="portfolio_json" id="portfolio_json">
  
-                <!-- PERSONAL DETAILS -->
+            <div class="grid">
+ 
+                <!-- PERSONAL -->
                 <section class="section">
                     <h2>Personal Details</h2>
- 
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" name="name" placeholder="Your full name"
-                               value="{{ person.name if person else '' }}" required>
+                        <input type="text" name="name" placeholder="Your full name" required
+                               value="{{ person.name if person else '' }}">
                     </div>
- 
                     <div class="form-row">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" name="email" placeholder="your@email.com"
-                                   value="{{ person.email if person else '' }}" required>
+                            <input type="email" name="email" placeholder="your@email.com" required
+                                   value="{{ person.email if person else '' }}">
                         </div>
                         <div class="form-group">
-                            <label>Phone <span class="optional-tag">optional</span></label>
+                            <label>Phone <span class="opt">optional</span></label>
                             <input type="text" name="phone" placeholder="+33 6 00 00 00 00"
                                    value="{{ person.phone if person else '' }}">
                         </div>
                     </div>
- 
                     <div class="form-group">
-                        <label>Location <span class="optional-tag">optional</span></label>
+                        <label>Location <span class="opt">optional</span></label>
                         <input type="text" name="location" placeholder="Paris, France"
                                value="{{ person.location if person else '' }}">
                     </div>
                 </section>
  
-                <!-- ONLINE PRESENCE -->
+                <!-- ONLINE -->
                 <section class="section">
                     <h2>Online Presence</h2>
- 
                     <div class="form-group">
-                        <label>LinkedIn <span class="optional-tag">optional</span></label>
+                        <label>LinkedIn <span class="opt">optional</span></label>
                         <input type="text" name="linkedin" placeholder="linkedin.com/in/yourprofile"
                                value="{{ person.linkedin if person else '' }}">
                     </div>
- 
                     <div class="form-group">
-                        <label>GitHub <span class="optional-tag">optional</span></label>
+                        <label>GitHub <span class="opt">optional</span></label>
                         <input type="text" name="github" placeholder="github.com/yourusername"
                                value="{{ person.github if person else '' }}">
                     </div>
- 
                     <div class="form-group">
-                        <label>Website / Portfolio <span class="optional-tag">optional</span></label>
+                        <label>Website <span class="opt">optional</span></label>
                         <input type="text" name="website" placeholder="yourwebsite.com"
                                value="{{ person.website if person else '' }}">
                     </div>
@@ -225,85 +252,342 @@
                 <!-- SUMMARY -->
                 <section class="section section-wide">
                     <h2>Professional Summary</h2>
- 
                     <div class="form-group">
-                        <textarea name="summary" placeholder="2–3 sentences about who you are, what you do, and what makes you stand out...">{{ person.summary if person else '' }}</textarea>
-                        <p class="hint">Keep it short and punchy — recruiters read this first.</p>
+                        <textarea name="summary" placeholder="2–3 sentences about who you are and what makes you stand out...">{{ person.summary if person else '' }}</textarea>
+                        <p class="hint">Recruiters read this first — keep it punchy.</p>
                     </div>
                 </section>
  
-                <!-- SKILLS & LANGUAGES -->
+                <!-- SKILLS -->
                 <section class="section">
                     <h2>Skills</h2>
- 
-                    <div class="form-group">
-                        <textarea name="skills" placeholder="Python, FastAPI, SQL, React, Git, Docker...">{{ person.skills if person else '' }}</textarea>
-                        <p class="hint">Separate each skill with a comma.</p>
+                    <div class="skills-input-area" id="skills-area">
+                        <input id="skill-input" type="text" placeholder="Type a skill and press Enter…">
                     </div>
+                    <p class="hint">Press Enter or comma to add a skill. Click × to remove.</p>
                 </section>
  
+                <!-- LANGUAGES -->
                 <section class="section">
                     <h2>Languages</h2>
- 
-                    <div class="form-group">
-                        <textarea name="languages" placeholder="French (Native), English (C1), Spanish (B2)...">{{ person.languages if person else '' }}</textarea>
-                        <p class="hint">Mention your level for each language.</p>
-                    </div>
+                    <div class="entries-list" id="languages-list"></div>
+                    <button type="button" class="add-btn" onclick="addLanguage()">+ Add Language</button>
                 </section>
  
                 <!-- EXPERIENCE -->
                 <section class="section section-wide">
                     <h2>Experience</h2>
- 
-                    <div class="form-group">
-                        <textarea name="experience" style="min-height: 120px;"
-                                  placeholder="Company — Job Title (Year–Year)&#10;• Responsibility or achievement&#10;• Tools / technologies used&#10;&#10;Company — Job Title (Year–Year)&#10;• ...">{{ person.experience if person else '' }}</textarea>
-                        <p class="hint">List your most recent experience first.</p>
-                    </div>
+                    <div class="entries-list" id="experience-list"></div>
+                    <button type="button" class="add-btn" onclick="addExperience()">+ Add Experience</button>
                 </section>
  
                 <!-- EDUCATION -->
-                <section class="section">
+                <section class="section section-wide">
                     <h2>Education</h2>
- 
-                    <div class="form-group">
-                        <textarea name="education" placeholder="Degree — University (Year–Year)&#10;Subjects, achievements, GPA if notable...">{{ person.education if person else '' }}</textarea>
-                    </div>
+                    <div class="entries-list" id="education-list"></div>
+                    <button type="button" class="add-btn" onclick="addEducation()">+ Add Education</button>
                 </section>
  
                 <!-- PROJECTS -->
-                <section class="section">
+                <section class="section section-wide">
                     <h2>Projects</h2>
- 
-                    <div class="form-group">
-                        <textarea name="projects" placeholder="Project Name — Technologies used&#10;What you built, what problem it solves...">{{ person.projects if person else '' }}</textarea>
-                    </div>
+                    <div class="entries-list" id="projects-list"></div>
+                    <button type="button" class="add-btn" onclick="addProject()">+ Add Project</button>
                 </section>
  
                 <!-- CERTIFICATIONS -->
                 <section class="section">
-                    <h2>Certifications <span class="optional-tag" style="font-size:14px;">optional</span></h2>
- 
-                    <div class="form-group">
-                        <textarea name="certifications" placeholder="AWS Certified Developer (2024)&#10;Google Data Analytics Certificate (2023)">{{ person.certifications if person else '' }}</textarea>
-                    </div>
+                    <h2>Certifications <span class="opt" style="font-size:13px;">optional</span></h2>
+                    <div class="entries-list" id="certifications-list"></div>
+                    <button type="button" class="add-btn" onclick="addCertification()">+ Add Certification</button>
                 </section>
  
                 <!-- INTERESTS -->
                 <section class="section">
-                    <h2>Interests <span class="optional-tag" style="font-size:14px;">optional</span></h2>
- 
+                    <h2>Interests <span class="opt" style="font-size:13px;">optional</span></h2>
                     <div class="form-group">
-                        <textarea name="interests" placeholder="Open-source, competitive programming, rock climbing, photography...">{{ person.interests if person else '' }}</textarea>
+                        <textarea name="interests" placeholder="Open-source, competitive programming, photography...">{{ person.interests if person else '' }}</textarea>
                     </div>
                 </section>
  
                 <div class="button-area">
-                    <button type="submit">Create Portfolio</button>
+                    <button type="submit" class="submit-btn">Save Portfolio</button>
                 </div>
  
-            </form>
+            </div><!-- .grid -->
+        </form>
+    </div>
+</main>
+ 
+<script>
+// ─── Prefill data from Jinja (passed as JSON) ───────────────────────────────
+const PREFILL = {
+    skills:         {{ (person.skills | tojson) if person else '[]' }},
+    languages:      {{ (person.languages | tojson) if person else '[]' }},
+    experience:     {{ (person.experience | tojson) if person else '[]' }},
+    education:      {{ (person.education | tojson) if person else '[]' }},
+    projects:       {{ (person.projects | tojson) if person else '[]' }},
+    certifications: {{ (person.certifications | tojson) if person else '[]' }},
+};
+ 
+// ─── SKILLS ─────────────────────────────────────────────────────────────────
+let skills = [];
+ 
+function renderSkills() {
+    const area = document.getElementById('skills-area');
+    const input = document.getElementById('skill-input');
+    area.innerHTML = '';
+    skills.forEach((s, i) => {
+        const tag = document.createElement('span');
+        tag.className = 'skill-tag';
+        tag.innerHTML = `${s} <button type="button" onclick="removeSkill(${i})">×</button>`;
+        area.appendChild(tag);
+    });
+    area.appendChild(input);
+    input.focus();
+}
+ 
+function addSkill(val) {
+    val = val.trim().replace(/,$/, '');
+    if (val && !skills.includes(val)) { skills.push(val); renderSkills(); }
+}
+ 
+function removeSkill(i) { skills.splice(i, 1); renderSkills(); }
+ 
+document.getElementById('skill-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addSkill(e.target.value);
+        e.target.value = '';
+    }
+});
+ 
+// ─── LANGUAGES ──────────────────────────────────────────────────────────────
+const LEVELS = ['Native','A1','A2','B1','B2','C1','C2'];
+ 
+function addLanguage(data = {}) {
+    const list = document.getElementById('languages-list');
+    const id = Date.now();
+    const levelOptions = LEVELS.map(l =>
+        `<option value="${l}" ${data.level === l ? 'selected' : ''}>${l}</option>`
+    ).join('');
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.dataset.id = id;
+    card.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeCard('languages-list',${id})">×</button>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Language</label>
+                <input type="text" class="lang-name" placeholder="French" value="${data.lang || ''}">
+            </div>
+            <div class="form-group">
+                <label>Level</label>
+                <select class="lang-level">${levelOptions}</select>
+            </div>
+        </div>`;
+    list.appendChild(card);
+}
+ 
+// ─── EXPERIENCE ─────────────────────────────────────────────────────────────
+function addExperience(data = {}) {
+    const list = document.getElementById('experience-list');
+    const id = Date.now();
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.dataset.id = id;
+    card.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeCard('experience-list',${id})">×</button>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Company</label>
+                <input type="text" class="exp-company" placeholder="Google" value="${data.company || ''}">
+            </div>
+            <div class="form-group">
+                <label>Role / Job Title</label>
+                <input type="text" class="exp-role" placeholder="Software Engineer" value="${data.role || ''}">
+            </div>
         </div>
-    </main>
+        <div class="form-row-3">
+            <div class="form-group">
+                <label>Start Year</label>
+                <input type="text" class="exp-start" placeholder="2022" value="${data.start || ''}">
+            </div>
+            <div class="form-group">
+                <label>End Year</label>
+                <input type="text" class="exp-end" placeholder="2024 or Present" value="${data.end || ''}">
+            </div>
+            <div class="form-group">
+                <label>Location <span class="opt">opt.</span></label>
+                <input type="text" class="exp-loc" placeholder="Paris, Remote…" value="${data.location || ''}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="exp-desc" placeholder="• Main responsibilities and achievements&#10;• Tools and technologies used">${data.description || ''}</textarea>
+        </div>`;
+    list.appendChild(card);
+}
+ 
+// ─── EDUCATION ──────────────────────────────────────────────────────────────
+function addEducation(data = {}) {
+    const list = document.getElementById('education-list');
+    const id = Date.now();
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.dataset.id = id;
+    card.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeCard('education-list',${id})">×</button>
+        <div class="form-row">
+            <div class="form-group">
+                <label>School / University</label>
+                <input type="text" class="edu-school" placeholder="MIT" value="${data.school || ''}">
+            </div>
+            <div class="form-group">
+                <label>Degree / Programme</label>
+                <input type="text" class="edu-degree" placeholder="BSc Computer Science" value="${data.degree || ''}">
+            </div>
+        </div>
+        <div class="form-row-3">
+            <div class="form-group">
+                <label>Start Year</label>
+                <input type="text" class="edu-start" placeholder="2020" value="${data.start || ''}">
+            </div>
+            <div class="form-group">
+                <label>End Year</label>
+                <input type="text" class="edu-end" placeholder="2023" value="${data.end || ''}">
+            </div>
+            <div class="form-group">
+                <label>GPA / Mention <span class="opt">opt.</span></label>
+                <input type="text" class="edu-gpa" placeholder="Mention Bien" value="${data.gpa || ''}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Main Subjects <span class="opt">optional</span></label>
+            <input type="text" class="edu-subjects" placeholder="Algorithms, Databases, Machine Learning…" value="${data.subjects || ''}">
+        </div>`;
+    list.appendChild(card);
+}
+ 
+// ─── PROJECTS ───────────────────────────────────────────────────────────────
+function addProject(data = {}) {
+    const list = document.getElementById('projects-list');
+    const id = Date.now();
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.dataset.id = id;
+    card.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeCard('projects-list',${id})">×</button>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Project Name</label>
+                <input type="text" class="proj-name" placeholder="Portfolio Manager" value="${data.name || ''}">
+            </div>
+            <div class="form-group">
+                <label>Technologies</label>
+                <input type="text" class="proj-tech" placeholder="FastAPI, SQLModel, HTML/CSS" value="${data.tech || ''}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Link <span class="opt">optional</span></label>
+            <input type="text" class="proj-link" placeholder="github.com/you/project" value="${data.link || ''}">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="proj-desc" placeholder="What you built and what problem it solves…">${data.description || ''}</textarea>
+        </div>`;
+    list.appendChild(card);
+}
+ 
+// ─── CERTIFICATIONS ─────────────────────────────────────────────────────────
+function addCertification(data = {}) {
+    const list = document.getElementById('certifications-list');
+    const id = Date.now();
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.dataset.id = id;
+    card.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeCard('certifications-list',${id})">×</button>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Certification Title</label>
+                <input type="text" class="cert-title" placeholder="AWS Certified Developer" value="${data.title || ''}">
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <input type="text" class="cert-year" placeholder="2024" value="${data.year || ''}">
+            </div>
+        </div>`;
+    list.appendChild(card);
+}
+ 
+// ─── SHARED REMOVE ───────────────────────────────────────────────────────────
+function removeCard(listId, id) {
+    const card = document.querySelector(`#${listId} [data-id='${id}']`);
+    if (card) card.remove();
+}
+ 
+// ─── COLLECT & SUBMIT ────────────────────────────────────────────────────────
+document.getElementById('main-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+ 
+    const langs = [...document.querySelectorAll('#languages-list .entry-card')].map(c => ({
+        lang:  c.querySelector('.lang-name').value.trim(),
+        level: c.querySelector('.lang-level').value,
+    })).filter(x => x.lang);
+ 
+    const exps = [...document.querySelectorAll('#experience-list .entry-card')].map(c => ({
+        company:     c.querySelector('.exp-company').value.trim(),
+        role:        c.querySelector('.exp-role').value.trim(),
+        start:       c.querySelector('.exp-start').value.trim(),
+        end:         c.querySelector('.exp-end').value.trim(),
+        location:    c.querySelector('.exp-loc').value.trim(),
+        description: c.querySelector('.exp-desc').value.trim(),
+    })).filter(x => x.company || x.role);
+ 
+    const edus = [...document.querySelectorAll('#education-list .entry-card')].map(c => ({
+        school:   c.querySelector('.edu-school').value.trim(),
+        degree:   c.querySelector('.edu-degree').value.trim(),
+        start:    c.querySelector('.edu-start').value.trim(),
+        end:      c.querySelector('.edu-end').value.trim(),
+        gpa:      c.querySelector('.edu-gpa').value.trim(),
+        subjects: c.querySelector('.edu-subjects').value.trim(),
+    })).filter(x => x.school || x.degree);
+ 
+    const projs = [...document.querySelectorAll('#projects-list .entry-card')].map(c => ({
+        name:        c.querySelector('.proj-name').value.trim(),
+        tech:        c.querySelector('.proj-tech').value.trim(),
+        link:        c.querySelector('.proj-link').value.trim(),
+        description: c.querySelector('.proj-desc').value.trim(),
+    })).filter(x => x.name);
+ 
+    const certs = [...document.querySelectorAll('#certifications-list .entry-card')].map(c => ({
+        title: c.querySelector('.cert-title').value.trim(),
+        year:  c.querySelector('.cert-year').value.trim(),
+    })).filter(x => x.title);
+ 
+    document.getElementById('portfolio_json').value = JSON.stringify({
+        skills, languages: langs, experience: exps,
+        education: edus, projects: projs, certifications: certs,
+    });
+ 
+    this.submit();
+});
+ 
+// ─── INIT PREFILL ────────────────────────────────────────────────────────────
+PREFILL.skills.forEach(s => { skills.push(s); });
+renderSkills();
+PREFILL.languages.forEach(addLanguage);
+PREFILL.experience.forEach(addExperience);
+PREFILL.education.forEach(addEducation);
+PREFILL.projects.forEach(addProject);
+PREFILL.certifications.forEach(addCertification);
+ 
+// Add empty rows if nothing prefilled
+if (!PREFILL.experience.length) addExperience();
+if (!PREFILL.education.length)  addEducation();
+if (!PREFILL.projects.length)   addProject();
+if (!PREFILL.languages.length)  addLanguage();
+</script>
 </body>
 </html>
