@@ -30,9 +30,19 @@ class Person(SQLModel, table=True):
     user_name: str = Field(foreign_key="sign_up.user_name")
     name: str
     email: str
+    phone: str | None = None
+    location: str | None = None
+    linkedin: str | None = None
+    github: str | None = None
+    website: str | None = None
+    summary: str | None = None
+    skills: str | None = None          
+    languages: str | None = None       
     experience: str
     education: str
     projects: str
+    certifications: str | None = None
+    interests: str | None = None
 
 
 # setting up sql database
@@ -51,7 +61,7 @@ def get_session():
         yield session
 
 
-# NEED TO GET A BETTER UNDERSTANDIG OF SESSIONS AND DEPENDS
+# NEED TO GET A BETTER UNDERSTANDING OF SESSIONS AND DEPENDS
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
@@ -151,6 +161,16 @@ def store_person_data(
     projects: Annotated[str, Form()],
     session: SessionDep,
     request: Request,
+    phone: Annotated[str, Form()] = "",
+    location: Annotated[str, Form()] = "",
+    linkedin: Annotated[str, Form()] = "",
+    github: Annotated[str, Form()] = "",
+    website: Annotated[str, Form()] = "",
+    summary: Annotated[str, Form()] = "",
+    skills: Annotated[str, Form()] = "",
+    languages: Annotated[str, Form()] = "",
+    certifications: Annotated[str, Form()] = "",
+    interests: Annotated[str, Form()] = "",
 ):
     
     user_name = request.session.get("user_name")  # ← READ FROM SESSION
@@ -164,18 +184,38 @@ def store_person_data(
 
     if person:
         person.name=name
-        person.email=email
-        person.experience=experience
-        person.education=education
-        person.projects=projects
+        person.email = email
+        person.phone = phone
+        person.location = location
+        person.linkedin = linkedin
+        person.github = github
+        person.website = website
+        person.summary = summary
+        person.skills = skills
+        person.languages = languages
+        person.experience = experience
+        person.education = education
+        person.projects = projects
+        person.certifications = certifications
+        person.interests = interests
     else:
         person = Person(
             user_name=user_name,
             name=name,
             email=email,
+            phone=phone,
+            location=location,
+            linkedin=linkedin,
+            github=github,
+            website=website,
+            summary=summary,
+            skills=skills,
+            languages=languages,
             experience=experience,
             education=education,
             projects=projects,
+            certifications=certifications,
+            interests=interests,
         )
         session.add(person)
 

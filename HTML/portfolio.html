@@ -1,137 +1,318 @@
 <!DOCTYPE html>
 <html>
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-
+    <title>{{ person.name }} — Portfolio</title>
+ 
     <style>
         body {
             margin: 0;
-            background-color: white;
+            background-color: #e8e8e8;
             font-family: Arial, sans-serif;
             color: #111;
             line-height: 1.45;
         }
-
+ 
+        /* --- Print button (hidden on print) --- */
+        .print-bar {
+            text-align: center;
+            padding: 18px;
+            background-color: #5a3d2b;
+        }
+ 
+        .print-bar a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            background-color: #75c8ae;
+            color: #5a3d2b;
+            padding: 10px 26px;
+            border-radius: 10px;
+            border: 2px solid #ffecb4;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 4px 4px 0 #e5771e;
+            transition: 0.2s ease;
+        }
+ 
+        .print-bar a:hover {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0 #e5771e;
+        }
+ 
+        /* --- Resume sheet --- */
         .resume {
             width: 800px;
             min-height: 1050px;
-            margin: 30px auto;
+            margin: 24px auto;
             padding: 45px 55px;
             background-color: white;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
         }
-
+ 
+        /* --- Header --- */
         .header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 6px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #111;
         }
-
+ 
         h1 {
             margin: 0;
-            font-size: 30px;
+            font-size: 32px;
             font-weight: bold;
             letter-spacing: 0.5px;
         }
-
-        .contact {
-            margin-top: 6px;
-            font-size: 14px;
+ 
+        .contact-line {
+            margin-top: 8px;
+            font-size: 13.5px;
+            color: #333;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px 14px;
         }
-
+ 
+        .contact-line span::before {
+            content: "•";
+            margin-right: 14px;
+            color: #aaa;
+        }
+ 
+        .contact-line span:first-child::before {
+            content: "";
+            margin-right: 0;
+        }
+ 
+        .contact-line a {
+            color: #111;
+            text-decoration: none;
+        }
+ 
+        .contact-line a:hover {
+            text-decoration: underline;
+        }
+ 
+        /* --- Sections --- */
         .section {
-            margin-top: 24px;
+            margin-top: 20px;
         }
-
+ 
         .section-title {
-            font-size: 17px;
+            font-size: 13px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             border-bottom: 1.5px solid #111;
-            padding-bottom: 3px;
-            margin-bottom: 10px;
+            padding-bottom: 4px;
+            margin-bottom: 12px;
         }
-
+ 
+        /* Summary */
+        .summary-text {
+            font-size: 14px;
+            color: #222;
+            line-height: 1.6;
+        }
+ 
+        /* Skills */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+ 
+        .skill-tag {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 13px;
+            color: #222;
+        }
+ 
+        /* Two-column layout for skills + languages */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 40px;
+        }
+ 
+        /* Languages */
+        .language-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+ 
+        .language-list li {
+            font-size: 14px;
+            padding: 2px 0;
+            color: #222;
+        }
+ 
+        /* Experience / Education / Projects */
         .entry {
-            margin-top: 10px;
+            margin-bottom: 14px;
         }
-
+ 
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+ 
         .entry-header {
             display: flex;
             justify-content: space-between;
             gap: 20px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14.5px;
         }
-
+ 
         .entry-subtitle {
-            font-size: 14px;
+            font-size: 13.5px;
             font-style: italic;
+            color: #444;
             margin-top: 2px;
         }
-
+ 
         p {
-            margin: 7px 0 0;
-            font-size: 14px;
+            margin: 6px 0 0;
+            font-size: 13.5px;
             text-align: justify;
             white-space: pre-line;
+            color: #222;
         }
-
+ 
         .empty-text {
-            color: #555;
+            color: #888;
             font-style: italic;
+            font-size: 13.5px;
         }
-
+ 
+        /* Certifications & Interests */
+        .cert-list, .interests-text {
+            font-size: 13.5px;
+            color: #222;
+            white-space: pre-line;
+        }
+ 
+        /* --- Print --- */
         @media print {
-            body {
-                background-color: white;
-            }
-
+            body { background-color: white; }
+ 
+            .print-bar { display: none; }
+ 
             .resume {
                 margin: 0;
                 width: auto;
                 min-height: auto;
-                padding: 35px 45px;
+                padding: 30px 40px;
+                box-shadow: none;
+            }
+        }
+ 
+        @media (max-width: 860px) {
+            .resume {
+                width: auto;
+                margin: 12px;
+                padding: 28px 22px;
+            }
+ 
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 0;
             }
         }
     </style>
 </head>
-
+ 
 <body>
-
+ 
+    <div class="print-bar">
+        <a href="/create-portfolio">✏️ Edit Portfolio</a>
+        <a href="javascript:window.print()">🖨️ Print / Save PDF</a>
+    </div>
+ 
     <main class="resume">
-
+ 
+        <!-- HEADER -->
         <header class="header">
             <h1>{{ person.name }}</h1>
-            <div class="contact">
-                {{ person.email }}
-            </div>
-        </header>
-
-        <section class="section">
-            <div class="section-title">Education</div>
-
-            <div class="entry">
-                <div class="entry-header">
-                    <span>Academic Background</span>
-                </div>
-
-                {% if person.education %}
-                    <p>{{ person.education }}</p>
-                {% else %}
-                    <p class="empty-text">Education details not provided.</p>
+ 
+            <div class="contact-line">
+                {% if person.email %}
+                    <span><a href="mailto:{{ person.email }}">{{ person.email }}</a></span>
+                {% endif %}
+                {% if person.phone %}
+                    <span>{{ person.phone }}</span>
+                {% endif %}
+                {% if person.location %}
+                    <span>{{ person.location }}</span>
+                {% endif %}
+                {% if person.linkedin %}
+                    <span><a href="https://{{ person.linkedin }}" target="_blank">{{ person.linkedin }}</a></span>
+                {% endif %}
+                {% if person.github %}
+                    <span><a href="https://{{ person.github }}" target="_blank">{{ person.github }}</a></span>
+                {% endif %}
+                {% if person.website %}
+                    <span><a href="https://{{ person.website }}" target="_blank">{{ person.website }}</a></span>
                 {% endif %}
             </div>
+        </header>
+ 
+        <!-- SUMMARY -->
+        {% if person.summary %}
+        <section class="section">
+            <div class="section-title">Summary</div>
+            <p class="summary-text">{{ person.summary }}</p>
         </section>
-
+        {% endif %}
+ 
+        <!-- SKILLS + LANGUAGES (side by side) -->
+        {% if person.skills or person.languages %}
+        <section class="section">
+            <div class="two-col">
+ 
+                {% if person.skills %}
+                <div>
+                    <div class="section-title">Skills</div>
+                    <div class="skills-grid">
+                        {% for skill in person.skills.split(',') %}
+                            {% if skill.strip() %}
+                                <span class="skill-tag">{{ skill.strip() }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+ 
+                {% if person.languages %}
+                <div>
+                    <div class="section-title">Languages</div>
+                    <ul class="language-list">
+                        {% for lang in person.languages.split(',') %}
+                            {% if lang.strip() %}
+                                <li>{{ lang.strip() }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+ 
+            </div>
+        </section>
+        {% endif %}
+ 
+        <!-- EXPERIENCE -->
         <section class="section">
             <div class="section-title">Experience</div>
-
+ 
             <div class="entry">
-                <div class="entry-header">
-                    <span>Professional Experience</span>
-                </div>
-
                 {% if person.experience %}
                     <p>{{ person.experience }}</p>
                 {% else %}
@@ -139,15 +320,25 @@
                 {% endif %}
             </div>
         </section>
-
+ 
+        <!-- EDUCATION -->
+        <section class="section">
+            <div class="section-title">Education</div>
+ 
+            <div class="entry">
+                {% if person.education %}
+                    <p>{{ person.education }}</p>
+                {% else %}
+                    <p class="empty-text">Education details not provided.</p>
+                {% endif %}
+            </div>
+        </section>
+ 
+        <!-- PROJECTS -->
         <section class="section">
             <div class="section-title">Projects</div>
-
+ 
             <div class="entry">
-                <div class="entry-header">
-                    <span>Project Work</span>
-                </div>
-
                 {% if person.projects %}
                     <p>{{ person.projects }}</p>
                 {% else %}
@@ -155,9 +346,25 @@
                 {% endif %}
             </div>
         </section>
-
+ 
+        <!-- CERTIFICATIONS -->
+        {% if person.certifications %}
+        <section class="section">
+            <div class="section-title">Certifications</div>
+            <p class="cert-list">{{ person.certifications }}</p>
+        </section>
+        {% endif %}
+ 
+        <!-- INTERESTS -->
+        {% if person.interests %}
+        <section class="section">
+            <div class="section-title">Interests</div>
+            <p class="interests-text">{{ person.interests }}</p>
+        </section>
+        {% endif %}
+ 
     </main>
-
+ 
 </body>
-
+ 
 </html>
