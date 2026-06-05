@@ -18,12 +18,14 @@ app.add_middleware(SessionMiddleware, secret_key="yes")
 templates = Jinja2Templates(directory="HTML")
  
  
+# Table for user login details.
 class Sign_Up(SQLModel, table=True):
     user_id: int | None = Field(default=None, primary_key=True)
     user_name: str
     password: str
  
  
+# Table for portfolio data.
 class Person(SQLModel, table=True):
     person_id: int | None = Field(default=None, primary_key=True)
     user_name: str = Field(foreign_key="sign_up.user_name")
@@ -54,6 +56,7 @@ def create_db():
     SQLModel.metadata.create_all(engine)
  
  
+# Gives each request a database session.
 def get_session():
     with Session(engine) as session:
         yield session
@@ -82,6 +85,7 @@ def sign_in_page(request: Request):
     return templates.TemplateResponse(request=request, name="sign-in.html")
  
  
+# Creates a new user account.
 @app.post("/sign-up")
 def store_login_information(
     user_name: Annotated[str, Form()],
@@ -102,6 +106,7 @@ def store_login_information(
     return RedirectResponse(url="/create-portfolio", status_code=303)
  
  
+# Checks login details.
 @app.post("/sign-in")
 def check_login_information(
     user_name: Annotated[str, Form()],
@@ -124,6 +129,7 @@ def check_login_information(
     )
  
  
+# Loads the portfolio form.
 @app.get("/create-portfolio", response_class=HTMLResponse)
 def create_portfolio_page(request: Request, session: SessionDep):
     user_name = request.session.get("user_name")
@@ -156,6 +162,7 @@ def create_portfolio_page(request: Request, session: SessionDep):
     )
  
  
+# Saves or updates portfolio data.
 @app.post("/create-portfolio")
 def store_person_data(
     request: Request,
@@ -203,6 +210,7 @@ def store_person_data(
     return RedirectResponse(url="/portfolio", status_code=303)
  
  
+# Shows the final portfolio.
 @app.get("/portfolio", response_class=HTMLResponse)
 def profile(request: Request, session: SessionDep):
     user_name = request.session.get("user_name")
